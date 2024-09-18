@@ -105,6 +105,7 @@ typedef enum
     CONTEXT_FUOTA,
     CONTEXT_SECURE_ELEMENT,
     CONTEXT_STORE_AND_FORWARD,
+    CONTEXT_FUOTA_METADATA
 } modem_context_type_t;
 
 /*

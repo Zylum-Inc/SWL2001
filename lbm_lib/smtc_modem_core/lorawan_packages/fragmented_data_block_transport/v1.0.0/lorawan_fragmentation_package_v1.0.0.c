@@ -748,6 +748,38 @@ static frag_status_t fragmentation_package_parser( lorawan_fragmentation_package
                         FRAG_SESSION_FINISHED_SUCCESSFULLY )
                     {
                         SMTC_MODEM_HAL_TRACE_PRINTF( " FILE RECONSTRUCTS SUCCESSFULLY !\n" );
+
+                        SMTC_MODEM_HAL_TRACE_PRINTF( " frag_decoder_status FragNbRx: %d, FragNbLost: %d, FragNbLastRx: %d, MissingFrag: %d, MatrixError: %d\n",
+                                frag_session_data[frag_index].frag_decoder_status.FragNbRx,
+                                frag_session_data[frag_index].frag_decoder_status.FragNbLost,
+                                frag_session_data[frag_index].frag_decoder_status.FragNbLastRx,
+                                frag_session_data[frag_index].frag_decoder_status.MissingFrag,
+                                frag_session_data[frag_index].frag_decoder_status.MatrixError
+                                );
+                        SMTC_MODEM_HAL_TRACE_PRINTF( " frag_group_data is_active: %d, frag_nb: %d, frag_size: %d, padding: %d, descriptor: %d\n",
+                                frag_session_data[frag_index].frag_group_data.is_active,
+                                frag_session_data[frag_index].frag_group_data.frag_nb,
+                                frag_session_data[frag_index].frag_group_data.frag_size,
+                                frag_session_data[frag_index].frag_group_data.padding,
+                                frag_session_data[frag_index].frag_group_data.descriptor
+                                );
+
+                        uint8_t temp[16];
+                        memset(temp, 0, 16);
+                        memcpy(temp, &frag_session_data[frag_index].frag_decoder_status, sizeof(frag_session_data[frag_index].frag_decoder_status));
+                        smtc_modem_hal_context_store(CONTEXT_FUOTA_METADATA,
+                                0,
+                                temp,
+                                16
+                            );
+
+                        memset(temp, 0, 16);
+                        memcpy(temp, &frag_session_data[frag_index].frag_group_data, sizeof(frag_session_data[frag_index].frag_group_data));
+                        smtc_modem_hal_context_store(CONTEXT_FUOTA_METADATA,
+                                16,
+                                temp,
+                                16
+                        );
                     }
                     else  // FRAG_SESSION_FAILED
                     {
