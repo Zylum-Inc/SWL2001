@@ -763,6 +763,18 @@ static frag_status_t fragmentation_package_parser( lorawan_fragmentation_package
                         FRAG_SESSION_FINISHED_SUCCESSFULLY )
                     {
                         SMTC_MODEM_HAL_TRACE_PRINTF( " FILE RECONSTRUCTS SUCCESSFULLY !\n" );
+                        
+                        // Initialize and save metadata
+                        smtc_modem_fuota_metadata_t metadata = {
+                            .total_bytes = frag_session_data[frag_index].frag_group_data.frag_nb * 
+                                         frag_session_data[frag_index].frag_group_data.frag_size,
+                            .fragment_size = frag_session_data[frag_index].frag_group_data.frag_size,
+                            .received_fragments = frag_session_data[frag_index].frag_decoder_status.FragNbRx,
+                            .lost_fragments = frag_session_data[frag_index].frag_decoder_status.FragNbLost,
+                            .padding = frag_session_data[frag_index].frag_group_data.padding
+                        };
+                        
+                        save_fuota_metadata(&metadata);
                     }
                     else  // FRAG_SESSION_FAILED
                     {
@@ -775,7 +787,7 @@ static frag_status_t fragmentation_package_parser( lorawan_fragmentation_package
                 }
             }
             // A message MAY carry more than one command, except for the DataFragment command,
-            // which SHALL be the only command in a message’s payload
+            // which SHALL be the only command in a message's payload
             fragmentation_package_rx_buffer_index += fragmentation_package_rx_buffer_length;
             break;
         }

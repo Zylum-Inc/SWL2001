@@ -246,6 +246,18 @@ typedef struct smtc_modem_dl_metadata_s
 } smtc_modem_dl_metadata_t;
 
 /**
+ * @brief FUOTA session metadata structure
+ */
+typedef struct smtc_modem_fuota_metadata_s
+{
+    uint32_t total_bytes;
+    uint16_t fragment_size;
+    uint16_t received_fragments;
+    uint16_t lost_fragments;
+    uint8_t padding;
+} smtc_modem_fuota_metadata_t;
+
+/**
  * @brief Cipher mode for stream service
  */
 typedef enum smtc_modem_stream_cipher_mode_e
@@ -2191,6 +2203,31 @@ smtc_modem_return_code_t smtc_modem_debug_set_duty_cycle_state( bool enable );
 smtc_modem_return_code_t smtc_modem_debug_connect_with_abp( uint8_t stack_id, uint32_t dev_addr,
                                                             uint8_t nwk_skey[SMTC_MODEM_KEY_LENGTH],
                                                             uint8_t app_skey[SMTC_MODEM_KEY_LENGTH] );
+
+/*!
+ * @brief Save FUOTA metadata to flash storage
+ *
+ * @param [in] metadata Pointer to the metadata structure to save
+ *
+ * @return Void
+ */
+void save_fuota_metadata(const smtc_modem_fuota_metadata_t* metadata);
+
+/*!
+ * @brief Get FUOTA metadata from flash storage
+ *
+ * @param [out] metadata Pointer to store the retrieved metadata
+ *
+ * @return Void
+ */
+void get_fuota_metadata(smtc_modem_fuota_metadata_t* metadata);
+
+/*!
+ * @brief Clear FUOTA metadata from flash storage
+ *
+ * @return Void
+ */
+void clear_fuota_metadata(void);
 
 #ifdef __cplusplus
 }
